@@ -17,11 +17,30 @@
     efiInstallAsRemovable = true;
   };
   services.openssh.enable = true;
+  services.openssh.settings.PermitRootLogin = "yes";
+  users.users.root.initialPassword = "root";
+  services.xserver.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
 
-  environment.systemPackages = map lib.lowPrio [
+  # Enable automatic login for the user.
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "nixos";
+
+  environment.systemPackages = [
     pkgs.curl
     pkgs.gitMinimal
+    pkgs.btop
+    pkgs.htop
+    pkgs.wget
+    pkgs.ungoogled-chromium
   ];
+
+  users.users.nixos = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    initialPassword = "nixos";
+  };
 
   users.users.root.openssh.authorizedKeys.keys =
   [

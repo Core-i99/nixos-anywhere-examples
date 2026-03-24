@@ -10,18 +10,35 @@
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
   ];
-  boot.loader.grub = {
-    # no need to set devices, disko will add all devices that have a EF02 partition to the list already
-    # devices = [ ];
-    efiSupport = true;
-    efiInstallAsRemovable = true;
+
+  # Bootloader setup
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    directories = [
+      "/var/log"
+    ];
+    files = [
+      "/etc/machine-id"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+      "/etc/ssh/ssh_host_rsa_key"
+      "/etc/ssh/ssh_host_rsa_key.pub"
+    ];
   };
+
   services.openssh.enable = true;
   services.openssh.settings.PermitRootLogin = "yes";
   users.users.root.initialPassword = "root";
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
+
+  # Set keyboard layout to Belgian
+  console.keyMap = "be-latin1";
+  services.xserver.xkb.layout = "be";
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;

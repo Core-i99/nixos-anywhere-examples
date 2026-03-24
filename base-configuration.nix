@@ -30,6 +30,33 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
 
+  # Disable system-level sleep/suspend
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
+  # Disable screensaver and display power management
+  services.xserver.screenSection = ''
+    Option "BlankTime" "0"
+    Option "StandbyTime" "0"
+    Option "SuspendTime" "0"
+    Option "OffTime" "0"
+  '';
+  services.xserver.displayManager.sessionCommands = ''
+    ${pkgs.xorg.xset}/bin/xset s off
+    ${pkgs.xorg.xset}/bin/xset -dpms
+    ${pkgs.xorg.xset}/bin/xset s noblank
+
+    # Disable XFCE Power Manager blanking and locking
+    ${pkgs.xfce.xfconf}/bin/xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -n -t int -s 0 || true
+    ${pkgs.xfce.xfconf}/bin/xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-sleep -n -t int -s 0 || true
+    ${pkgs.xfce.xfconf}/bin/xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-off -n -t int -s 0 || true
+    ${pkgs.xfce.xfconf}/bin/xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lock-screen-suspend-hibernate -n -t bool -s false || true
+    ${pkgs.xfce.xfconf}/bin/xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false || true
+    ${pkgs.xfce.xfconf}/bin/xfconf-query -c xfce4-screensaver -p /lock-screen-with-screensaver -n -t bool -s false || true
+  '';
+
   # Set keyboard layout to Belgian
   console.keyMap = "be-latin1";
   services.xserver.xkb.layout = "be";

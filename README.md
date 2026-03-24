@@ -7,11 +7,11 @@ Checkout the [flake.nix](flake.nix) for examples tested on different hosters.
 Initial installation using nixos-anywhere:
 
 ```bash
-nix run github:nix-community/nixos-anywhere -- --flake .#debian-vm --generate-hardware-config nixos-generate-config ./hardware-configuration.nix --ssh-option "StrictHostKeyChecking=no" root@IP_ADDRESS
+nix run github:nix-community/nixos-anywhere -- --flake .#debian-vm --generate-hardware-config nixos-generate-config ./hardware-configuration-vm.nix --ssh-option "StrictHostKeyChecking=no" root@IP_ADDRESS
 ```
 Or use sshpass
 ```bash
-sshpass -p 'root' nix run github:nix-community/nixos-anywhere -- --flake .#debian-vm --generate-hardware-config nixos-generate-config ./hardware-configuration.nix --ssh-option "StrictHostKeyChecking=no" root@IP_ADDRESS
+sshpass -p 'root' nix run github:nix-community/nixos-anywhere -- --flake .#debian-vm --generate-hardware-config nixos-generate-config ./hardware-configuration-vm.nix --ssh-option "StrictHostKeyChecking=no" root@IP_ADDRESS
 ```
 
 To update the NixOS configuration on your remote machine after making changes to the flake or configuration files:

@@ -1,16 +1,9 @@
 {
-  modulesPath,
   lib,
   pkgs,
   ...
 } @ args:
 {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/profiles/qemu-guest.nix")
-    ./disk-config.nix
-  ];
-
   # Bootloader setup
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -32,6 +25,7 @@
   services.openssh.enable = true;
   services.openssh.settings.PermitRootLogin = "yes";
   users.users.root.initialPassword = "root";
+  
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
@@ -60,10 +54,10 @@
   };
 
   users.users.root.openssh.authorizedKeys.keys =
-  [
-    # change this to your ssh key
-    "# CHANGE"
-  ] ++ (args.extraPublicKeys or []); # this is used for unit-testing this module and can be removed if not needed
+    [
+      # change this to your ssh key
+      "# CHANGE"
+    ] ++ (args.extraPublicKeys or []); # this is used for unit-testing this module and can be removed if not needed
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.11";
 }

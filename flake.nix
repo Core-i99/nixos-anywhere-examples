@@ -35,6 +35,17 @@
           # Update this to your physical disk (e.g. /dev/nvme0n1 or /dev/sda)
           { disko.devices.disk.disk1.device = "/dev/nvme0n1"; }
           ./configuration-pc.nix
+        ];
+      };
+
+      # pc-bios-mutable for a legacy BIOS machine with persistent root
+      nixosConfigurations.pc-bios-mutable = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          disko.nixosModules.disko
+          # Update this to your physical disk (e.g. /dev/sda or /dev/vda)
+          { disko.devices.disk.disk1.device = "/dev/sda"; }
+          ./configuration-pc-bios-mutable.nix
           ./hardware-configuration-pc.nix
         ];
       };
